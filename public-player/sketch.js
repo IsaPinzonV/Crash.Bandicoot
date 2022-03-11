@@ -240,8 +240,6 @@ function draw() {
       image(imgWinner, 0, 0);
 
       //reclaim coupon
-      rect(320, 30, 70, 25);
-
       if (
         pmouseX > 270 &&
         pmouseX < 270 + 70 &&
@@ -336,6 +334,7 @@ function connectionButtons(display, buttonX, buttonY, width, height) {
     socket.emit("display", display);
   }
 }
+
 //receive change of screens depending on player buttons
 socket.on("displayPlayer", (changePlayer) => {
   switch (changePlayer) {
@@ -348,35 +347,3 @@ socket.on("displayPlayer", (changePlayer) => {
       break;
   }
 });
-
-//input email user
-async function sendPlayerEmail(player) {
-  let bodyJSON = JSON.stringify(player);
-  const putRequest = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: bodyJSON,
-  };
-  const request = await fetch(
-    `http://${IPaddress}:${PORT}/player-email`,
-    putRequest
-  );
-}
-
-//input name user
-async function sendPlayerName(player) {
-  let bodyJSON = JSON.stringify(player);
-  const putRequest = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: bodyJSON,
-  };
-  const request = await fetch(
-    `http://${IPaddress}:${PORT}/player-name`,
-    putRequest
-  );
-}

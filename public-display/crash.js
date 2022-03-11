@@ -11,8 +11,6 @@ function Crash(imgs) {
   this.score = 0;
 
   this.show = function () {
-    console.log(this.imgs);
-    console.log(this.currentImg);
     image(this.imgs[this.currentImg], this.x, this.y, 100, 170);
   };
 
@@ -40,7 +38,6 @@ function Crash(imgs) {
       enemy.x <= this.x + 100 &&
       enemy.y >=this.y&&
       enemy.y <=this.y+170
-
     ) {
       return true;
     }else{

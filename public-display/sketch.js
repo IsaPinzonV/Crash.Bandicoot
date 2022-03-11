@@ -1,8 +1,8 @@
 //Create the socket
 let socket = io();
+let pantallasDisplay = 0;
 
 let speed = 30;
-let pantallasDisplay = 0;
 
 let crash;
 let element;
@@ -23,10 +23,8 @@ function preload() {
 
   //elements
   imgPrice = new loadImage("data/price.png");
-  imgTNT = new loadImage("data/tnt.png");
   imgSilverBox = new loadImage("data/silverBox.png");
   imgWoodBox = new loadImage("data/woodBox.png");
-  imgLives = new loadImage("data/live.png");
   imgArrow = new loadImage("data/arrow.png");
 
   //crash movements
@@ -66,7 +64,6 @@ function draw() {
     //Qr screen
     case 0:
       image(imgQR, 0, 0, windowWidth, windowHeight);
-
       break;
 
     //home screen 1
@@ -103,7 +100,10 @@ function draw() {
 
       if (lives <= 0) {
         pantallasDisplay = 6;
+
+        //emit change screen display player
         scoreDisplay("LOSER");
+
         lives = 1;
       }
 
@@ -116,9 +116,14 @@ function draw() {
       //winner or loser screen depending on number of lives
       if (frameCount % 1500 == 0 && lives >= 1) {
         pantallasDisplay = 5;
+
+        //emit change screen display player winner
         scoreDisplay("WINNER");
+
       } else if (frameCount % 1500 == 0 && lives <= 1) {
         pantallasDisplay = 6;
+
+        //emit change screen display player loser
         scoreDisplay("LOSER");
       }
 
@@ -131,7 +136,6 @@ function draw() {
         if (crash.hits(obstacles[i])) {
           lives -= 1;
           obstacles.splice(i, 1);
-          console.log("hit");
           return false;
         }
 
@@ -245,6 +249,11 @@ socket.on("display", (changeDisplays) => {
   }
 });
 
+//emit change of screens to display
+function scoreDisplay(displayPlayer) {
+  socket.emit("displayPlayer", displayPlayer);
+}
+
 //Counter points
 function pointCounter() {
   if (
@@ -258,10 +267,4 @@ function pointCounter() {
 
     lives += 1;
   }
-  console.log("lives:", lives);
-}
-
-//emit change of screens to display
-function scoreDisplay(displayPlayer) {
-  socket.emit("displayPlayer", displayPlayer);
 }
